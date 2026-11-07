@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مناطق المملكة العربية السعودية | درس تفاعلي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f4ee; --card:#ffffff; --ink:#1f2a24; --muted:#6b756f; --line:#e6e0d4;
+  --green:#0f6b4a; --green2:#13865d; --greenSoft:#e3f1ea; --sand:#efe4cf; --gold:#c49a3c;
+  --north:#7fb3a0; --south:#d9a35f; --east:#e2c46d; --west:#8fa9d6; --center:#c98b8b;
+  --ok:#1f9d63; --bad:#d4553f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Tajawal',system-ui,sans-serif;background:#0b3325;color:var(--ink);line-height:1.6}
+button{font-family:inherit;cursor:pointer}
+svg.ic{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:-.15em}
+
+/* ===== 16:9 stage ===== */
+#stage{position:absolute;top:50%;left:50%;width:1600px;height:900px;background:var(--bg);overflow:hidden;transform-origin:center center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.slide{position:absolute;inset:0 0 84px 0;padding:44px 80px 24px;display:none;flex-direction:column}
+.slide.on{display:flex;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+.slide h2{font-size:48px;font-weight:800;line-height:1.2;display:flex;align-items:center;gap:18px}
+.slide h2 .badge{width:72px;height:72px;border-radius:22px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:40px}
+.sub{color:var(--muted);font-size:25px;margin:4px 0 18px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:30px}
+
+/* bottom bar */
+#bar{position:absolute;left:0;right:0;bottom:0;height:84px;display:flex;align-items:center;justify-content:space-between;padding:0 80px;border-top:2px solid var(--line);background:#fff}
+#bar .t{font-size:22px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:12px}
+#bar .t svg{color:var(--green);font-size:30px}
+.navb{display:flex;align-items:center;gap:14px}
+.nb{width:56px;height:56px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--ink);display:grid;place-items:center;font-size:28px;transition:.2s}
+.nb:hover{border-color:var(--green);color:var(--green)}
+.nb.main{background:var(--green);border-color:var(--green);color:#fff}
+.nb:disabled{opacity:.3;cursor:default}
+#dots{display:flex;gap:10px;margin:0 10px}
+#dots i{width:14px;height:14px;border-radius:50%;background:var(--line);cursor:pointer;transition:.2s}
+#dots i.on{background:var(--green);width:38px;border-radius:10px}
+
+/* ===== title slide ===== */
+#s1{padding:0;background:var(--green);color:#fff;flex-direction:row;align-items:center;bottom:0}
+#s1 .txt{flex:1;padding:0 110px 0 40px}
+#s1 .tag{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.14);padding:8px 22px;border-radius:40px;font-size:24px;margin-bottom:26px}
+#s1 h1{font-size:96px;font-weight:800;line-height:1.15}
+#s1 p{font-size:30px;opacity:.88;margin-top:20px;max-width:720px}
+#s1 .start{margin-top:46px;border:0;background:#fff;color:var(--green);font-size:30px;font-weight:800;padding:18px 44px;border-radius:20px;display:inline-flex;align-items:center;gap:14px}
+#s1 .art{width:700px;height:100%;position:relative;display:grid;place-items:center}
+#s1 .art svg{width:600px;height:auto}
+#s1 .art .ol{fill:rgba(255,255,255,.1);stroke:rgba(255,255,255,.75);stroke-width:3}
+#s1 .art .rgl{fill:none;stroke:rgba(255,255,255,.3);stroke-width:1.5}
+#s1 .art .pin{fill:var(--gold);stroke:#fff;stroke-width:3}
+#s1 .ring{position:absolute;width:640px;height:640px;border-radius:50%;border:2px dashed rgba(255,255,255,.18)}
+
+/* ===== objectives ===== */
+.objs{display:grid;grid-template-columns:1fr 1fr;gap:26px;flex:1}
+.obj{display:flex;gap:26px;align-items:center}
+.obj .ic-b{flex:none;width:110px;height:110px;border-radius:30px;background:var(--greenSoft);color:var(--green);display:grid;place-items:center;font-size:62px}
+.obj h3{font-size:34px;font-weight:800}
+.obj p{color:var(--muted);font-size:25px;line-height:1.5}
+
+/* ===== think ===== */
+.think{flex:1;display:grid;grid-template-columns:1fr 440px;gap:34px}
+.think .q{background:var(--sand);border:0;display:flex;flex-direction:column;justify-content:center}
+.think .q .ql{font-size:46px;font-weight:800;line-height:1.35}
+.think .reveal{margin-top:30px;font-size:28px;line-height:1.6;color:var(--ink);background:#fff;border-radius:22px;padding:24px 28px;display:none}
+.think .reveal.show{display:block;animation:fade .4s}
+.btn{border:0;background:var(--green);color:#fff;padding:16px 34px;border-radius:18px;font-size:26px;font-weight:800;display:inline-flex;align-items:center;gap:12px;transition:.2s}
+.btn:hover{background:var(--green2)}
+.btn.light{background:#fff;color:var(--green);border:2px solid var(--green)}
+.think .num{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.think .num b{font-size:210px;line-height:1;color:var(--green);font-weight:800}
+.think .num span{font-size:34px;font-weight:700}
+.dirs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:26px}
+.dirs em{font-style:normal;font-size:20px;font-weight:700;padding:4px 16px;border-radius:20px}
+
+/* ===== map ===== */
+.two{flex:1;display:grid;grid-template-columns:1fr 560px;gap:28px;min-height:0}
+.mapbox{position:relative;padding:18px 18px 10px;display:flex;flex-direction:column;min-height:0}
+.map{width:100%;height:100%;display:block;min-height:0}
+.map .rg{stroke:#fff;stroke-width:2.2;stroke-linejoin:round;transition:fill .25s,opacity .25s;cursor:pointer}
+.map .rg:hover{opacity:.8}
+.map .rg.dim{opacity:.22}
+.map .rg.sel{stroke:var(--ink);stroke-width:4}
+.map .lbl{font-size:25px;font-weight:800;fill:#1f2a24;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:rgba(255,255,255,.85);stroke-width:5px}
+.map .lbl.sm{font-size:19px}
+.map .cap{fill:#fff;stroke:var(--ink);stroke-width:2.2;pointer-events:none}
+.map .sea{font-size:24px;fill:#4b7aa7;font-weight:700;text-anchor:middle;letter-spacing:1px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+.chip{border:2px solid var(--line);background:#fff;border-radius:30px;padding:6px 18px;font-size:21px;font-weight:700;display:flex;align-items:center;gap:9px}
+.chip i{width:16px;height:16px;border-radius:50%;display:inline-block}
+.chip.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.compass{position:absolute;bottom:22px;left:22px;width:84px;height:84px;color:var(--green)}
+.compass svg{width:100%;height:100%}
+
+.info{display:flex;flex-direction:column;min-height:0;padding:24px 26px}
+.info .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);text-align:center;font-size:28px;gap:14px}
+.info .empty svg{font-size:110px;color:var(--green);opacity:.75}
+.rname{font-size:38px;font-weight:800;line-height:1.2}
+.rdir{display:inline-block;font-size:19px;font-weight:700;padding:2px 14px;border-radius:20px;margin:6px 0 6px;align-self:flex-start}
+.fact{display:flex;gap:14px;align-items:center;padding:8px 0;border-bottom:2px solid var(--bg)}
+.fact .fi{flex:none;width:46px;height:46px;border-radius:16px;background:var(--greenSoft);color:var(--green);display:grid;place-items:center;font-size:30px}
+.fact b{display:block;font-size:19px;color:var(--muted);font-weight:500;line-height:1.3}
+.fact span{font-size:23px;font-weight:800;line-height:1.35}
+.feat{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.feat em{font-style:normal;background:var(--bg);border-radius:12px;padding:2px 12px;font-size:19px;font-weight:700}
+.dyk{margin-top:8px;background:var(--sand);border-radius:18px;padding:10px 16px;font-size:20px;line-height:1.5;display:flex;gap:12px}
+.dyk svg{font-size:34px;color:var(--gold)}
+.dyk b{display:block;color:var(--green)}
+.prog{margin-top:auto;padding-top:10px}
+.prog small{display:flex;justify-content:space-between;color:var(--muted);font-size:20px;margin-bottom:6px}
+.pbar{height:14px;background:var(--line);border-radius:10px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--gold);transition:width .4s}
+.medal{display:none;margin-top:12px;background:var(--green);color:#fff;border-radius:18px;padding:12px 18px;font-size:22px;font-weight:700;align-items:center;gap:12px}
+.medal svg{font-size:44px;color:var(--gold)}
+.medal.show{display:flex;animation:fade .5s}
+
+/* challenge */
+.map.play .rg{fill:#dfe7e2}
+.map.play .rg.right{fill:var(--ok)}
+.map.play .rg.wrong{fill:var(--bad)}
+.map.play .rg.hint{fill:var(--gold)}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+.pill{background:var(--ink);color:#fff;border-radius:30px;padding:6px 20px;font-weight:800;font-size:22px;display:inline-flex;align-items:center;gap:8px}
+.pill.gold{background:var(--gold)}
+.prompt{font-size:38px;font-weight:800;line-height:1.45}
+.prompt mark{background:var(--sand);padding:0 12px;border-radius:12px;color:var(--ink);box-decoration-break:clone}
+.toast{min-height:80px;font-weight:700;margin-top:18px;font-size:25px;line-height:1.5;display:flex;gap:10px;align-items:flex-start}
+.toast svg{font-size:34px;margin-top:2px}
+.toast.ok{color:var(--ok)}.toast.bad{color:var(--bad)}
+.dots{display:flex;gap:7px}
+.dots i{width:16px;height:16px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--ok)}.dots i.no{background:var(--bad)}.dots i.cur{background:var(--ink)}
+.tgt{display:flex;align-items:center;justify-content:center;flex:1;color:var(--green);opacity:.12;font-size:200px}
+
+/* assessment */
+.qwrap{flex:1;display:grid;grid-template-columns:1fr 470px;gap:28px;min-height:0}
+.skill{display:inline-flex;align-items:center;gap:8px;font-size:21px;font-weight:800;background:var(--greenSoft);color:var(--green);padding:4px 16px;border-radius:20px;margin-bottom:14px;align-self:flex-start}
+.qtext{font-size:36px;font-weight:800;line-height:1.4;margin-bottom:24px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.opt{border:2.5px solid var(--line);background:#fff;border-radius:20px;padding:18px 20px;font-size:28px;font-weight:800;text-align:right;display:flex;gap:14px;align-items:center;transition:.15s;color:var(--ink)}
+.opt:hover:not(:disabled){border-color:var(--green)}
+.opt .l{flex:none;width:44px;height:44px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:22px}
+.opt.ok{border-color:var(--ok);background:#e8f6ee}
+.opt.ok .l{background:var(--ok);color:#fff}
+.opt.no{border-color:var(--bad);background:#fbebe7}
+.opt.no .l{background:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.expl{margin-top:18px;padding:14px 20px;border-radius:18px;background:var(--bg);font-size:24px;line-height:1.5;visibility:hidden;display:flex;gap:10px;align-items:flex-start}
+.expl svg{font-size:30px;margin-top:3px}
+.expl.show{visibility:visible}
+.side{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
+.qmap{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.qmap svg{max-height:560px}
+.qmap .rg{fill:#e3ddd0;stroke:#fff;stroke-width:3;cursor:default}
+.qmap .rg.hl{fill:var(--green)}
+.qicon{color:var(--green);font-size:230px;opacity:.16}
+
+/* summary */
+.sumg{flex:1;display:grid;grid-template-columns:470px 1fr;gap:28px;min-height:0}
+.res{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.res .score{font-size:130px;font-weight:800;color:var(--green);line-height:1}
+.stars{display:flex;gap:10px;font-size:58px;margin:14px 0;color:var(--gold)}
+.stars .off{color:var(--line)}
+.res .msg{font-size:26px;font-weight:700;line-height:1.45}
+.rows{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px;width:100%}
+.rows div{background:var(--bg);border-radius:16px;padding:10px 4px;font-size:18px;color:var(--muted)}
+.rows b{display:block;font-size:30px;color:var(--ink)}
+.acts{display:flex;gap:12px;margin-top:22px}
+.acts .btn{font-size:21px;padding:12px 22px}
+table{width:100%;border-collapse:collapse;font-size:21px}
+th,td{padding:4px 14px;border-bottom:2px solid var(--bg);text-align:right;line-height:1.45}
+th{background:var(--greenSoft);color:var(--green);font-size:20px}
+td:first-child{color:var(--muted);width:44px}
+td i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-left:10px}
+td.c{font-weight:800}
+
+@media print{
+  html,body{overflow:visible;height:auto;background:#fff}
+  #stage{transform:none!important;position:static;box-shadow:none}
+  #bar{display:none}
+  .slide{display:none!important}
+  #s7{display:flex!important;position:static}
+}
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+<!-- 1 Title -->
+<section class="slide on" id="s1">
+  <div class="txt">
+    <span class="tag" data-i="book"></span>
+    <h1>مناطق المملكة<br>العربية السعودية</h1>
+    <p>نستكشف الخريطة، ونتعرّف على المناطق الإدارية ومقارّ إماراتها، ثم نختبر مهاراتنا بأسئلة على نمط التقييم الخارجي.</p>
+    <button class="start" onclick="next()">لنبدأ الرحلة <span data-i="arrowL"></span></button>
+  </div>
+  <div class="art"><div class="ring"></div><svg id="titleMap"></svg></div>
+</section>
+
+<!-- 2 Objectives -->
+<section class="slide" id="s2">
+  <h2><span class="badge" data-i="target"></span>أهداف الدرس</h2>
+  <p class="sub">في نهاية الدرس ستكونين قادرة على:</p>
+  <div class="objs">
+    <div class="card obj"><div class="ic-b" data-i="map"></div><div><h3>تحديد المناطق</h3><p>تحديد مواقع المناطق الإدارية الثلاث عشرة على خريطة المملكة.</p></div></div>
+    <div class="card obj"><div class="ic-b" data-i="gov"></div><div><h3>ربط المنطقة بمقرّها</h3><p>معرفة مقر إمارة كل منطقة من مناطق المملكة.</p></div></div>
+    <div class="card obj"><div class="ic-b" data-i="compass"></div><div><h3>قراءة الخريطة</h3><p>وصف موقع المنطقة بالجهات وبما يجاورها من بحار.</p></div></div>
+    <div class="card obj"><div class="ic-b" data-i="search"></div><div><h3>الاستنتاج</h3><p>استنتاج المنطقة من معالمها وخصائصها المميزة.</p></div></div>
+  </div>
+</section>
+
+<!-- 3 Think -->
+<section class="slide" id="s3">
+  <h2><span class="badge" data-i="bulb"></span>سؤال للتفكير</h2>
+  <p class="sub">ناقشي زميلاتك قبل كشف الإجابة</p>
+  <div class="think">
+    <div class="card q">
+      <div class="ql">لماذا تُقسَّم الدولة إلى مناطق إدارية؟</div>
+      <div class="reveal" id="reveal">لتسهيل إدارة شؤون المواطنين والمقيمين، وتوزيع الخدمات والمشروعات التنموية على أرجاء الوطن. ولكل منطقة أمير يتولّى إدارتها، ومقرّ إمارة تتبعه محافظات ومراكز.</div>
+      <div style="margin-top:30px" id="revealBtn"><button class="btn" onclick="document.getElementById('reveal').classList.add('show');this.parentNode.style.display='none'"><span data-i="eye"></span>اكشفي الإجابة</button></div>
+    </div>
+    <div class="card num">
+      <b>13</b><span>منطقة إدارية</span>
+      <div class="dirs" id="dirsLegend"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 Explore -->
+<section class="slide" id="s4">
+  <h2><span class="badge" data-i="map"></span>استكشفي الخريطة</h2>
+  <p class="sub">اضغطي على أي منطقة لتظهر بطاقتها، واستكشفي المناطق كلها لتحصلي على وسام المستكشفة.</p>
+  <div class="two">
+    <div class="card mapbox">
+      <div class="legend" id="legend"></div>
+      <svg class="map" id="map1"></svg>
+      <div class="compass" data-i="north"></div>
+    </div>
+    <div class="card info">
+      <div id="info" style="display:flex;flex-direction:column;flex:1;min-height:0">
+        <div class="empty"><span data-i="tap"></span>اختاري منطقة من الخريطة</div>
+      </div>
+      <div class="medal" id="medal"><span data-i="medal"></span><div>أحسنتِ! حصلتِ على وسام <b>المستكشفة</b></div></div>
+      <div class="prog">
+        <small><span>المناطق المستكشفة</span><span id="pcount">0 / 13</span></small>
+        <div class="pbar"><i id="pbar"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Map challenge -->
+<section class="slide" id="s5">
+  <h2><span class="badge" data-i="target"></span>تحدّي الخريطة</h2>
+  <p class="sub">حدّدي المنطقة المطلوبة على الخريطة، ولكِ محاولتان في كل سؤال.</p>
+  <div class="two">
+    <div class="card mapbox">
+      <svg class="map play" id="map2"></svg>
+      <div class="compass" data-i="north"></div>
+    </div>
+    <div class="card info">
+      <div class="qhead"><span class="pill" id="mcRound">1 / 8</span><span class="pill gold"><span data-i="star"></span><span id="mcScore">0</span></span></div>
+      <div class="prompt" id="mcPrompt"></div>
+      <div class="toast" id="mcToast"></div>
+      <div class="tgt" data-i="pin"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto">
+        <div class="dots" id="mcDots"></div>
+        <button class="btn" id="mcNext" style="visibility:hidden" onclick="mcNext()"><span id="mcNextT">التالي</span><span data-i="arrowL"></span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 Assessment -->
+<section class="slide" id="s6">
+  <h2><span class="badge" data-i="clip"></span>أسئلة على نمط التقييم الخارجي</h2>
+  <p class="sub" style="margin-bottom:18px">اختيار من متعدد يقيس التذكّر والفهم وقراءة الخريطة والاستدلال</p>
+  <div class="qwrap">
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="qhead"><span class="pill" id="qRound"></span><div class="dots" id="qDots"></div></div>
+      <span class="skill" id="qSkill"></span>
+      <div class="qtext" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="expl" id="qExpl"></div>
+      <div style="margin-top:auto;text-align:left"><button class="btn" id="qNext" style="visibility:hidden" onclick="qNext()"><span id="qNextT">التالي</span><span data-i="arrowL"></span></button></div>
+    </div>
+    <div class="card side"><div class="qmap" id="qMap"></div></div>
+  </div>
+</section>
+
+<!-- 7 Summary -->
+<section class="slide" id="s7">
+  <h2><span class="badge" data-i="medal"></span>الخلاصة</h2>
+  <p class="sub" style="margin-bottom:18px">نتيجتك، وملخّص المناطق ومقارّ إماراتها</p>
+  <div class="sumg">
+    <div class="card res" id="result"></div>
+    <div class="card" style="padding:18px 22px;overflow:hidden">
+      <table>
+        <thead><tr><th>#</th><th>المنطقة</th><th>مقر الإمارة</th><th>الجهة</th></tr></thead>
+        <tbody id="sumTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- bottom bar -->
+<div id="bar">
+  <div class="t"><span data-i="map"></span>الدراسات الاجتماعية · مناطق المملكة</div>
+  <div class="navb">
+    <button class="nb" id="fsBtn" title="ملء الشاشة" onclick="toggleFS()" data-i="expand"></button>
+    <button class="nb" id="prevB" onclick="prev()" title="السابق" data-i="arrowR"></button>
+    <div id="dots"></div>
+    <button class="nb main" id="nextB" onclick="next()" title="التالي" data-i="arrowL"></button>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ===== hand-drawn icon set (48×48 line icons) ===== */
+const I = {
+  map:'<path d="M6 12l12-6 12 6 12-6v30l-12 6-12-6-12 6z"/><path d="M18 6v30M30 12v30"/>',
+  gov:'<path d="M24 5l17 9H7z"/><path d="M10 18v16M19 18v16M29 18v16M38 18v16"/><path d="M6 38h36M4 43h40"/>',
+  compass:'<circle cx="24" cy="24" r="19"/><path d="M30.5 17.5l-4 9-9 4 4-9z"/><circle cx="24" cy="24" r="1.2" fill="currentColor"/>',
+  search:'<circle cx="21" cy="21" r="13"/><path d="M31 31l11 11"/><path d="M15 21a6 6 0 0 1 6-6"/>',
+  bulb:'<path d="M17 33c0-4-7-8-7-16a14 14 0 0 1 28 0c0 8-7 12-7 16z"/><path d="M18 39h12M20 44h8"/><path d="M24 33v-9l-4-4M24 24l4-4"/>',
+  target:'<circle cx="24" cy="24" r="19"/><circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="5"/><path d="M24 24L40 8M34 8h6v6"/>',
+  tap:'<circle cx="24" cy="20" r="5"/><path d="M14 20a10 10 0 0 1 20 0M8 20a16 16 0 0 1 32 0"/><path d="M24 25v18"/><path d="M18 37l6 6 6-6"/>',
+  medal:'<path d="M15 4l5 14M33 4l-5 14M15 4h18"/><circle cx="24" cy="31" r="12"/><path d="M24 24l2.2 4.6 5 .6-3.7 3.4 1 5-4.5-2.5-4.5 2.5 1-5-3.7-3.4 5-.6z"/>',
+  star:'<path d="M24 5l5.9 12 13.1 1.9-9.5 9.3 2.3 13.1L24 35.1l-11.8 6.2 2.3-13.1L5 18.9 18.1 17z"/>',
+  starF:'<path fill="currentColor" d="M24 5l5.9 12 13.1 1.9-9.5 9.3 2.3 13.1L24 35.1l-11.8 6.2 2.3-13.1L5 18.9 18.1 17z"/>',
+  check:'<circle cx="24" cy="24" r="19"/><path d="M15 24.5l6 6 12-13"/>',
+  cross:'<circle cx="24" cy="24" r="19"/><path d="M17 17l14 14M31 17L17 31"/>',
+  arrowL:'<path d="M40 24H8M20 12L8 24l12 12"/>',
+  arrowR:'<path d="M8 24h32M28 12l12 12-12 12"/>',
+  expand:'<path d="M6 17V6h11M31 6h11v11M42 31v11H31M17 42H6V31"/>',
+  print:'<path d="M13 18V5h22v13"/><rect x="5" y="18" width="38" height="16" rx="3"/><path d="M13 28h22v15H13z"/><path d="M18 34h12M18 38h8"/>',
+  replay:'<path d="M8 24a16 16 0 1 0 5-11.6"/><path d="M8 6v8h8"/>',
+  clip:'<rect x="9" y="7" width="30" height="37" rx="4"/><path d="M18 4h12v7H18z"/><path d="M16 21l3 3 5-6M28 21h6M16 33l3 3 5-6M28 33h6"/>',
+  pin:'<path d="M24 44s-14-14-14-25a14 14 0 0 1 28 0c0 11-14 25-14 25z"/><circle cx="24" cy="19" r="5"/>',
+  book:'<path d="M24 12c-5-4-12-5-19-4v30c7-1 14 0 19 4 5-4 12-5 19-4V8c-7-1-14 0-19 4z"/><path d="M24 12v30"/>',
+  eye:'<path d="M3 24s8-14 21-14 21 14 21 14-8 14-21 14S3 24 3 24z"/><circle cx="24" cy="24" r="6"/>',
+  spark:'<path d="M24 4v8M24 36v8M4 24h8M36 24h8M10 10l5.5 5.5M32.5 32.5L38 38M38 10l-5.5 5.5M15.5 32.5L10 38"/><circle cx="24" cy="24" r="6"/>',
+  pinS:'<path d="M24 44s-14-14-14-25a14 14 0 0 1 28 0c0 11-14 25-14 25z"/><circle cx="24" cy="19" r="5"/>',
+  north:'<circle cx="24" cy="26" r="18" stroke-width="2"/><path d="M24 12l6 14h-12z" fill="currentColor" stroke="none"/><path d="M24 40l6-14h-12z" stroke-width="2"/><text x="24" y="7" text-anchor="middle" font-size="9" font-weight="800" fill="currentColor" stroke="none" font-family="Tajawal">ش</text>'
+};
+const icon=(n,extra='')=>`<svg class="ic" viewBox="0 0 48 48" ${extra}>${I[n]}</svg>`;
+function paintIcons(root=document){root.querySelectorAll('[data-i]').forEach(e=>{if(!e.dataset.p){e.insertAdjacentHTML('afterbegin',icon(e.dataset.i));e.dataset.p=1}})}
+document.querySelector('#s1 .tag').append('الدراسات الاجتماعية · درس تفاعلي');
+
+const GEO = {"sharqiyah": {"d": "M790.7,403.3L798.8,412.6L812.6,409.6L814.4,410.3L814.2,415.2L818.6,409.3L823.5,411.7L815.8,418.8L813.1,426.1L819.4,425.2L826.9,428.7L828.0,438.0L873.8,497.2L994.7,513.7L998.6,509.4L1020.0,547.1L988.7,650.2L846.3,702.1L706.6,723.7L665.1,746.1L637.9,781.8L630.3,801.0L671.6,460.0L671.1,442.1L664.1,428.0L633.5,401.1L632.0,329.0L630.3,324.5L612.9,316.9L601.9,305.7L590.4,306.4L573.4,295.6L559.3,293.8L547.8,283.4L540.1,281.7L526.6,274.1L521.0,263.5L512.6,256.0L513.8,247.7L525.1,233.3L548.3,194.8L559.6,187.1L582.7,178.3L630.5,182.5L637.5,201.4L641.6,206.5L677.9,206.1L681.1,208.6L679.7,214.1L682.8,213.0L682.2,217.6L686.8,222.9L685.9,226.5L688.4,231.8L695.0,233.8L692.7,236.2L699.3,243.2L698.9,246.1L697.2,248.3L698.1,244.4L695.6,246.8L696.0,243.1L694.4,248.8L695.9,247.5L696.1,250.4L699.2,250.4L698.9,254.3L696.9,254.3L698.7,254.7L700.2,253.3L699.7,255.6L700.8,256.5L703.4,253.9L707.7,258.2L716.3,257.8L719.7,262.8L710.6,263.2L717.4,264.6L715.5,268.9L719.7,268.2L720.2,275.5L724.5,275.6L722.7,278.4L729.8,279.3L728.1,277.1L732.0,276.1L731.9,280.7L738.1,288.3L751.1,294.3L759.9,303.6L751.8,300.5L753.8,312.4L761.4,317.1L762.6,321.3L759.1,336.3L753.9,327.7L751.2,330.9L751.9,338.0L753.5,336.3L757.2,338.7L758.0,345.0L764.1,354.8L764.6,357.3L759.2,352.0L759.4,353.7L768.9,365.0L770.1,366.1L770.5,363.4L774.7,367.4L779.0,387.2L786.8,396.2L788.5,403.8L790.7,403.3Z", "c": [759.4, 498.4], "cap": [757.1, 315.8]}, "northern": {"d": "M237.6,20.0L297.7,30.4L376.1,74.1L500.3,171.7L582.7,178.3L553.0,190.6L544.6,198.8L525.1,233.3L513.8,247.7L512.1,254.0L514.5,258.5L510.3,262.3L492.4,247.4L471.9,242.5L457.2,214.9L454.0,212.6L442.5,217.8L433.1,214.1L425.5,214.3L421.4,211.7L418.5,203.1L404.3,206.6L391.0,195.5L372.6,191.0L358.0,192.8L341.3,188.7L312.7,194.7L303.4,191.8L311.3,183.3L312.8,164.9L315.0,160.5L360.9,132.1L367.7,123.9L357.4,115.6L350.3,104.2L333.5,101.1L321.2,92.6L285.9,92.0L271.3,85.1L239.2,80.5L194.9,84.2L189.6,81.9L183.4,72.1L177.1,67.1L176.3,58.9L182.0,39.1L228.4,26.6L237.6,20.0Z", "c": [376.7, 133.6], "cap": [327.0, 79.3]}, "jouf": {"d": "M88.5,172.3L110.3,156.5L122.3,137.9L157.5,130.5L165.9,113.1L181.8,104.3L133.2,52.8L182.0,39.1L176.3,58.9L176.6,65.6L191.7,83.3L239.2,80.5L271.3,85.1L285.9,92.0L319.4,92.2L333.5,101.1L350.3,104.2L357.4,115.6L368.0,124.9L360.9,132.1L315.0,160.5L312.8,164.9L311.3,183.3L303.4,191.8L299.4,191.2L281.4,198.3L237.5,218.5L230.1,225.5L225.5,223.4L214.1,226.9L211.0,222.3L188.7,221.4L178.4,217.9L172.4,210.4L171.8,192.2L169.2,189.1L161.1,195.0L155.4,204.3L128.3,200.7L110.9,205.0L107.1,203.9L93.4,187.1L80.8,183.0L57.9,185.9L50.6,189.4L31.9,187.7L37.8,163.9L88.5,172.3Z", "c": [217.6, 146.8], "cap": [287.6, 131.8]}, "najran": {"d": "M630.3,801.0L617.6,808.6L609.1,808.5L596.2,791.5L577.8,794.2L535.4,789.6L522.8,783.6L474.6,784.8L471.5,788.0L467.7,786.7L463.5,790.2L462.1,787.5L455.7,787.9L450.3,783.1L452.1,754.0L450.4,743.8L471.4,716.8L484.9,709.5L486.5,702.1L484.5,691.9L491.5,684.7L492.0,675.3L511.2,686.6L527.9,688.6L645.3,674.3L630.3,801.0Z", "c": [554.6, 738.7], "cap": [473.7, 780.4]}, "asir": {"d": "M450.3,783.1L443.1,779.0L436.3,780.8L418.2,760.8L416.5,754.3L409.2,757.7L404.9,770.4L402.4,771.5L392.5,759.8L381.5,758.4L377.3,752.2L369.8,751.3L369.4,738.5L361.7,737.6L363.5,728.1L359.4,715.3L346.5,712.8L344.2,710.4L344.2,692.5L347.6,694.1L354.1,690.1L362.8,690.2L365.7,687.3L367.3,682.0L364.6,673.5L366.1,663.4L363.3,659.6L358.2,660.5L365.1,640.7L373.8,633.0L371.8,625.4L374.1,617.5L379.8,629.2L384.9,631.9L416.4,608.4L430.5,605.0L437.6,606.3L451.7,599.2L470.1,620.8L464.5,644.4L472.5,656.9L492.0,675.3L491.9,683.5L484.9,690.5L486.5,703.9L484.9,709.5L471.4,716.8L450.8,742.3L452.1,754.0L450.3,783.1Z", "c": [418.4, 691.5], "cap": [396.3, 742.4]}, "jazan": {"d": "M428.8,822.2L424.0,822.9L421.7,829.9L410.0,838.5L406.4,819.8L399.9,814.6L398.4,805.6L393.8,803.3L389.5,796.4L389.8,804.6L387.2,782.8L377.0,772.0L359.2,758.6L353.2,748.9L355.5,743.6L361.7,737.6L368.9,737.7L369.1,750.5L377.3,752.2L381.5,758.4L392.5,759.8L402.4,771.5L404.9,770.4L409.2,757.7L416.5,754.3L418.2,760.8L436.3,780.8L427.9,788.9L432.0,791.7L427.4,794.9L425.6,801.4L425.4,810.5L430.1,816.4L428.8,822.2ZM381.4,821.1L381.0,827.5L376.0,824.8L378.1,823.5L376.6,821.8L370.4,823.0L362.0,815.6L361.0,811.2L368.0,819.0L374.2,820.6L375.5,815.5L381.4,821.1Z", "c": [409.3, 785.8], "cap": [398.7, 811.6]}, "tabuk": {"d": "M153.3,414.0L146.0,403.7L145.9,400.5L142.2,397.8L147.3,396.8L146.7,381.0L140.2,373.3L132.1,356.5L126.5,350.7L125.3,352.6L121.0,349.6L119.1,344.4L120.7,337.0L112.0,332.4L89.2,291.0L83.5,286.2L77.4,273.9L66.8,262.5L55.5,240.6L48.0,233.7L50.5,231.4L42.7,228.0L32.9,230.5L32.5,228.1L30.9,230.5L31.6,228.3L29.3,229.4L26.4,226.9L23.5,229.0L24.5,230.5L21.8,232.6L20.0,229.3L24.0,225.3L30.9,206.8L29.7,199.6L32.7,188.2L50.6,189.4L57.9,185.9L80.8,183.0L93.4,187.1L107.1,203.9L110.9,205.0L128.3,200.7L155.4,204.3L161.1,195.0L170.2,189.3L172.4,210.4L178.4,217.9L188.7,221.4L211.0,222.3L215.2,227.1L226.7,223.4L232.9,227.5L252.5,232.9L267.5,244.8L274.3,268.4L285.4,276.4L284.3,280.7L275.5,289.5L268.9,304.0L264.3,300.2L237.4,302.9L222.2,295.0L218.7,290.0L216.1,294.8L207.6,292.2L198.0,296.9L197.3,292.0L192.8,288.5L191.9,284.5L179.8,281.2L170.7,265.7L158.9,270.9L145.5,266.4L125.0,274.9L125.7,277.2L131.3,276.8L134.4,279.9L135.9,301.1L147.2,307.3L143.1,320.7L148.1,334.1L152.6,332.3L161.9,337.7L164.0,343.2L172.5,351.3L176.8,364.0L183.6,366.8L182.0,398.4L178.8,401.2L171.1,401.0L164.3,406.7L155.6,407.9L153.3,414.0Z", "c": [149.1, 266.1], "cap": [114.7, 214.4]}, "madinah": {"d": "M213.2,472.2L211.1,464.5L209.2,464.8L210.9,466.9L208.3,465.8L203.4,452.3L179.6,434.8L181.8,433.5L179.8,433.7L180.2,431.3L178.7,434.3L176.3,434.3L167.3,426.9L165.0,429.2L160.0,428.1L155.5,423.0L157.2,420.1L153.3,414.0L155.6,407.9L164.3,406.7L171.1,401.0L178.8,401.2L182.0,398.4L183.6,366.8L176.8,364.0L172.5,351.3L164.0,343.2L161.9,337.7L152.6,332.3L148.1,334.1L143.1,320.7L147.7,308.6L135.9,301.1L134.4,279.9L131.3,276.8L124.9,276.7L125.8,274.1L145.5,266.4L158.9,270.9L170.7,265.7L179.8,281.2L191.9,284.5L192.8,288.5L197.3,292.0L198.0,296.9L207.6,292.2L216.1,294.8L217.8,289.9L222.2,295.0L237.4,302.9L265.3,300.3L269.9,307.2L267.7,319.2L275.5,322.0L273.0,342.2L275.5,354.3L275.1,368.2L277.3,372.6L281.9,373.8L294.8,369.5L306.8,368.6L319.0,359.3L340.4,361.1L354.0,364.8L356.2,369.0L355.9,384.8L366.5,390.1L371.6,405.5L377.1,410.3L372.6,421.0L371.9,444.7L360.7,445.1L361.4,456.1L359.1,460.7L338.1,474.4L346.3,480.8L346.1,483.4L335.8,489.1L308.0,516.1L298.5,513.7L289.0,520.1L282.4,520.0L280.8,508.8L272.1,503.3L275.4,491.6L273.4,486.4L253.2,490.5L249.8,484.6L238.8,484.6L226.6,471.1L213.2,472.2Z", "c": [254.7, 396.0], "cap": [259.1, 417.6]}, "makkah": {"d": "M353.4,747.6L348.5,742.2L345.6,729.2L335.0,717.6L336.9,710.5L331.5,705.2L333.4,698.4L328.3,695.4L326.8,688.2L323.0,684.1L322.4,675.6L313.7,670.3L315.3,670.7L315.5,665.9L313.0,661.5L308.6,660.6L308.8,662.4L302.6,654.6L303.0,651.9L281.6,635.4L273.0,633.9L274.8,636.5L266.2,631.7L257.0,620.4L258.3,619.3L253.5,613.2L254.1,611.1L250.2,609.8L251.4,606.9L244.2,601.9L238.4,592.3L238.2,588.0L233.9,581.6L238.2,577.0L237.7,571.6L234.5,568.0L235.3,559.1L233.3,560.3L226.8,545.7L230.4,545.9L232.0,533.7L236.9,525.0L233.4,527.0L234.0,517.6L229.4,508.4L230.7,506.1L227.5,502.8L228.7,507.2L225.5,502.2L223.0,497.0L226.0,501.2L228.4,500.8L225.1,495.8L220.6,494.1L220.5,486.3L216.4,481.8L213.2,472.2L226.6,471.1L238.8,484.6L249.8,484.6L253.2,490.5L273.4,486.4L275.4,491.6L272.1,503.3L280.8,508.8L281.4,519.4L287.8,520.4L297.0,514.0L309.2,515.5L315.7,506.6L335.8,489.1L345.2,484.4L346.3,480.8L339.3,476.4L338.6,473.1L359.1,460.7L361.4,456.1L360.7,445.1L371.9,444.7L371.9,453.9L377.6,459.6L390.5,495.5L396.2,498.0L417.2,499.6L420.3,502.4L419.4,513.3L421.7,517.5L426.0,519.0L434.8,517.2L443.1,519.9L441.8,529.9L444.1,548.3L440.2,556.4L438.5,578.1L451.7,599.2L437.6,606.3L430.5,605.0L416.4,608.4L384.9,631.9L380.6,630.3L371.4,615.1L349.1,620.2L344.4,612.1L339.6,610.4L336.2,613.8L337.2,624.2L331.7,636.2L321.0,639.9L315.7,645.6L322.7,652.3L324.1,672.8L335.3,682.7L341.6,681.2L349.1,662.0L362.4,659.5L365.8,662.3L364.6,673.5L367.3,682.0L365.2,688.3L343.6,693.9L344.7,711.4L358.6,714.4L363.5,728.1L360.8,739.6L353.4,747.6Z", "c": [345.0, 595.8], "cap": [269.5, 576.1]}, "riyadh": {"d": "M499.4,360.5L502.5,355.7L499.7,338.3L485.6,319.2L486.0,305.6L507.4,286.9L506.2,281.0L496.5,272.1L499.2,263.5L505.4,259.1L510.3,262.3L515.0,258.7L521.9,264.6L526.6,274.1L540.1,281.7L547.8,283.4L558.3,293.3L573.4,295.6L590.4,306.4L601.9,305.7L612.9,316.9L629.1,323.4L631.4,326.4L633.5,401.1L664.1,428.0L670.0,438.4L671.9,448.4L645.3,674.3L527.9,688.6L511.2,686.6L492.0,675.3L472.5,656.9L464.5,644.4L470.1,620.8L451.7,599.2L438.8,579.2L440.2,556.4L444.1,548.3L441.8,529.9L443.1,519.9L434.8,517.2L422.8,518.1L419.7,514.6L420.5,503.5L418.3,500.3L394.4,497.7L389.3,494.0L377.6,459.6L371.6,452.9L372.6,421.0L381.2,403.5L385.3,401.2L396.8,405.6L422.4,406.4L426.4,401.6L425.1,392.1L434.1,381.5L454.2,375.5L468.4,360.6L499.4,360.5Z", "c": [540.8, 490.0], "cap": [594.7, 405.2]}, "qassim": {"d": "M497.3,274.6L505.4,280.0L507.4,286.9L486.1,304.4L485.4,318.1L499.6,338.1L502.4,353.9L501.3,360.0L468.4,360.6L454.2,375.5L434.1,381.5L425.1,392.1L426.4,401.6L422.4,406.4L396.8,405.6L385.3,401.2L381.2,403.5L377.1,410.3L372.2,406.4L366.5,390.1L355.9,384.8L355.7,366.5L344.5,362.2L370.2,352.4L367.6,342.5L370.6,339.5L379.3,341.1L379.1,331.8L381.8,325.5L389.2,324.0L397.9,311.6L416.1,298.0L428.6,292.4L434.0,283.8L439.8,279.3L461.3,269.2L480.1,281.6L490.2,282.3L497.3,274.6Z", "c": [430.5, 341.0], "cap": [466.1, 321.0]}, "hail": {"d": "M489.2,282.6L478.9,281.3L464.5,269.6L457.9,270.3L436.3,281.6L428.6,292.4L416.1,298.0L397.9,311.6L389.2,324.0L381.8,325.5L379.1,331.8L379.3,341.1L370.6,339.5L367.6,342.5L369.3,353.1L344.5,362.2L317.6,359.6L306.8,368.6L279.7,373.7L275.1,368.2L275.5,354.3L273.0,342.2L275.5,322.0L268.5,320.0L267.1,316.9L270.0,309.7L268.9,304.0L274.0,292.3L284.3,280.7L285.4,276.4L274.3,268.4L268.6,247.0L264.7,242.1L250.7,232.0L230.1,225.5L237.5,218.5L299.4,191.2L312.7,194.7L341.3,188.7L358.0,192.8L372.6,191.0L391.0,195.5L404.3,206.6L418.5,203.1L424.2,213.9L433.1,214.1L442.5,217.8L452.4,212.7L456.3,213.9L471.9,242.5L492.4,247.4L504.8,257.6L497.1,267.3L497.3,274.6L489.2,282.6Z", "c": [354.1, 268.3], "cap": [357.8, 259.1]}, "baha": {"d": "M374.1,617.5L371.8,625.4L373.8,633.0L365.1,640.7L358.2,660.5L348.6,662.4L341.6,681.2L334.2,682.1L323.6,671.8L322.7,652.3L315.7,645.6L321.0,639.9L331.7,636.2L336.9,625.5L335.9,614.7L338.6,610.9L344.4,612.1L349.1,620.2L369.3,614.6L374.1,617.5Z", "c": [340.7, 648.9], "cap": [347.4, 649.4]}, "_vb": [0, 0, 1040, 859], "_outline": "M378.1,823.5L376.6,821.8L370.4,823.0L362.0,815.6L361.0,811.2L368.0,819.0L374.2,820.6L375.5,815.5L381.4,821.1L381.0,827.5L376.0,824.8L378.1,823.5ZM353.4,747.6L348.5,742.2L345.6,729.2L335.0,717.6L336.9,710.5L331.5,705.2L333.4,698.4L328.3,695.4L326.8,688.2L323.0,684.1L322.4,675.6L313.7,670.3L315.3,670.7L315.5,665.9L313.0,661.5L308.6,660.6L308.8,662.4L302.6,654.6L303.0,651.9L281.6,635.4L273.0,633.9L274.8,636.5L266.2,631.7L257.0,620.4L258.3,619.3L253.5,613.2L254.1,611.1L250.2,609.8L251.4,606.9L244.2,601.9L238.4,592.3L238.2,588.0L233.9,581.6L238.2,577.0L237.7,571.6L234.5,568.0L235.3,559.1L233.3,560.3L226.8,545.7L230.4,545.9L232.0,533.7L236.9,525.0L233.4,527.0L234.0,517.6L229.4,508.4L230.7,506.1L227.5,502.8L228.7,507.2L225.5,502.2L223.0,497.0L226.0,501.2L228.4,500.8L225.1,495.8L220.6,494.1L220.5,486.3L216.4,481.8L213.2,472.2L211.1,464.5L209.2,464.8L210.9,466.9L208.3,465.8L203.4,452.3L179.6,434.8L181.8,433.5L179.8,433.7L180.2,431.3L178.7,434.3L176.3,434.3L167.3,426.9L165.0,429.2L160.0,428.1L155.5,423.0L157.2,420.1L153.3,414.0L146.0,403.7L145.9,400.5L142.2,397.8L147.3,396.8L146.7,381.0L140.2,373.3L132.1,356.5L126.5,350.7L125.3,352.6L121.0,349.6L119.1,344.4L120.7,337.0L112.0,332.4L89.2,291.0L83.5,286.2L77.4,273.9L66.8,262.5L55.5,240.6L48.0,233.7L50.5,231.4L42.7,228.0L32.9,230.5L32.5,228.1L30.9,230.5L31.6,228.3L29.3,229.4L26.4,226.9L23.5,229.0L24.5,230.5L21.8,232.6L20.0,229.3L24.0,225.3L30.9,206.8L29.7,199.6L32.7,188.2L50.6,189.4L31.9,187.7L37.8,163.9L88.5,172.3L110.3,156.5L122.3,137.9L157.5,130.5L165.9,113.1L181.8,104.3L133.2,52.8L182.0,39.1L228.4,26.6L237.6,20.0L297.7,30.4L376.1,74.1L500.3,171.7L582.7,178.3L630.5,182.5L637.5,201.4L641.6,206.5L677.9,206.1L681.1,208.6L679.7,214.1L682.8,213.0L682.2,217.6L686.8,222.9L685.9,226.5L688.4,231.8L695.0,233.8L692.7,236.2L699.3,243.2L698.9,246.1L697.2,248.3L698.1,244.4L695.6,246.8L696.0,243.1L694.4,248.8L695.9,247.5L696.1,250.4L699.2,250.4L698.9,254.3L696.9,254.3L698.7,254.7L700.2,253.3L699.7,255.6L700.8,256.5L703.4,253.9L707.7,258.2L716.3,257.8L719.7,262.8L710.6,263.2L717.4,264.6L715.5,268.9L719.7,268.2L720.2,275.5L724.5,275.6L722.7,278.4L729.8,279.3L728.1,277.1L732.0,276.1L731.9,280.7L738.1,288.3L751.1,294.3L759.9,303.6L751.8,300.5L753.8,312.4L761.4,317.1L762.6,321.3L759.1,336.3L753.9,327.7L751.2,330.9L751.9,338.0L753.5,336.3L757.2,338.7L758.0,345.0L764.1,354.8L764.6,357.3L759.2,352.0L759.4,353.7L768.9,365.0L770.1,366.1L770.5,363.4L774.7,367.4L779.0,387.2L786.8,396.2L788.5,403.8L790.7,403.3L798.8,412.6L812.6,409.6L814.4,410.3L814.2,415.2L818.6,409.3L823.5,411.7L815.8,418.8L813.1,426.1L819.4,425.2L826.9,428.7L828.0,438.0L873.8,497.2L994.7,513.7L998.6,509.4L1020.0,547.1L988.7,650.2L846.3,702.1L706.6,723.7L665.1,746.1L637.9,781.8L630.3,801.0L617.6,808.6L609.1,808.5L596.2,791.5L577.8,794.2L535.4,789.6L522.8,783.6L474.6,784.8L471.5,788.0L467.7,786.7L463.5,790.2L462.1,787.5L455.7,787.9L450.3,783.1L443.1,779.0L436.3,780.8L427.9,788.9L432.0,791.7L427.4,794.9L425.6,801.4L425.4,810.5L430.1,816.4L428.8,822.2L424.0,822.9L421.7,829.9L410.0,838.5L406.4,819.8L399.9,814.6L398.4,805.6L393.8,803.3L389.5,796.4L389.8,804.6L387.2,782.8L377.0,772.0L359.2,758.6L353.2,748.9L354.2,746.8L353.4,747.6ZM671.6,460.0L671.4,452.3L645.3,674.3L630.3,801.0L671.6,460.0ZM364.4,661.2L363.3,659.6L362.7,659.7L364.4,661.2ZM364.6,673.5L366.1,663.4L365.8,662.9L364.6,673.5ZM365.5,687.5L365.7,687.3L367.3,682.0L365.5,687.5ZM358.1,690.2L362.8,690.2L364.5,688.5L358.1,690.2ZM346.0,693.3L347.6,694.1L350.9,692.0L346.0,693.3ZM343.6,693.9L344.2,702.7L344.2,693.8L343.6,693.9ZM344.7,711.4L345.3,711.5L344.7,710.9L344.7,711.4ZM363.5,728.1L359.4,715.3L358.9,715.2L363.5,728.1ZM361.2,738.1L361.7,737.6L363.5,728.1L361.2,738.1ZM176.6,65.6L177.0,66.1L176.3,58.9L176.6,65.6ZM187.1,77.9L183.4,72.1L179.6,69.1L187.1,77.9ZM191.7,83.3L192.7,83.3L191.0,82.5L191.7,83.3ZM333.5,101.1L321.2,92.6L320.1,92.6L333.5,101.1ZM367.3,124.3L367.7,123.9L357.4,115.6L367.3,124.3ZM299.4,191.2L312.7,194.7L303.4,191.8L299.4,191.2ZM281.4,198.3L237.5,218.5L299.4,191.2L281.4,198.3ZM424.2,213.9L424.9,214.0L423.8,213.2L424.2,213.9ZM455.4,213.6L454.0,212.6L453.2,213.0L455.4,213.6ZM471.9,242.5L457.2,214.9L456.7,214.6L471.9,242.5ZM501.2,262.1L505.4,259.1L510.3,262.3L504.7,257.7L501.2,262.1ZM515.0,258.7L521.4,264.2L521.0,263.5L513.7,256.9L514.5,258.5L510.3,262.3L515.0,258.7ZM497.1,267.3L497.2,269.9L498.6,265.4L497.1,267.3ZM497.3,274.6L504.2,279.2L497.3,272.8L497.3,274.6ZM489.5,282.3L490.2,282.3L497.3,274.6L489.5,282.3ZM479.7,281.4L480.1,281.6L483.8,281.9L479.7,281.4ZM464.5,269.6L462.3,269.9L476.0,278.9L464.5,269.6ZM457.9,270.3L447.9,275.5L459.2,270.2L457.9,270.3ZM436.3,281.6L435.6,282.5L438.1,280.6L436.3,281.6ZM369.3,352.7L370.2,352.4L367.6,342.5L369.3,352.7ZM355.7,368.0L355.7,366.5L354.7,366.1L355.7,368.0ZM371.6,405.5L372.0,405.9L366.5,390.1L371.6,405.5ZM372.6,421.0L381.2,403.5L377.1,410.3L372.6,421.0ZM371.9,453.9L377.6,459.6L371.9,453.3L371.9,453.9ZM390.5,495.5L392.8,496.6L390.1,494.6L390.5,495.5ZM396.2,498.0L400.1,498.3L395.8,497.9L396.2,498.0ZM419.0,501.3L418.3,500.3L417.8,500.2L419.0,501.3ZM419.4,513.3L419.8,513.9L420.5,503.5L420.3,503.1L419.4,513.3ZM421.7,517.5L422.4,517.7L420.9,516.0L421.7,517.5ZM426.0,519.0L434.8,517.2L423.5,518.1L426.0,519.0ZM438.5,578.1L438.8,578.6L440.2,556.4L438.5,578.1ZM379.1,627.9L379.8,629.2L380.0,629.3L379.1,627.9ZM282.3,519.5L280.8,508.8L281.4,519.4L282.3,519.5ZM288.2,520.0L285.5,520.0L287.8,520.4L288.2,520.0ZM298.5,513.7L297.9,514.1L302.4,514.7L298.5,513.7ZM310.6,513.6L308.6,515.5L309.2,515.5L310.6,513.6ZM345.3,483.8L335.8,489.1L345.2,484.4L345.3,483.8ZM338.1,474.4L339.0,475.1L338.8,473.9L338.1,474.4ZM348.6,662.4L341.6,681.2L348.9,662.3L348.6,662.4ZM334.6,682.1L335.3,682.7L341.6,681.2L334.6,682.1ZM324.1,672.3L324.1,672.8L329.5,677.5L324.1,672.3ZM336.9,625.5L336.9,625.0L331.7,636.2L336.9,625.5ZM337.4,612.7L336.2,613.8L336.2,614.3L337.4,612.7ZM344.4,612.1L339.6,610.4L339.1,611.0L344.4,612.1ZM372.1,616.3L371.4,615.1L370.5,615.3L372.1,616.3ZM161.1,195.0L169.6,189.7L169.2,189.1L161.1,195.0ZM170.3,190.5L172.4,210.4L171.8,192.2L170.3,190.5ZM225.5,223.4L214.8,226.7L215.2,227.1L226.1,223.6L225.5,223.4ZM250.7,232.0L230.1,225.5L229.1,225.0L232.9,227.5L251.7,232.7L250.7,232.0ZM257.7,237.0L265.7,243.4L264.7,242.1L257.7,237.0ZM267.9,246.1L274.3,268.4L268.6,247.0L267.9,246.1ZM284.3,280.7L275.5,289.5L274.3,292.0L284.3,280.7ZM268.9,304.0L266.4,302.0L269.3,306.3L268.9,304.0ZM269.7,308.2L269.0,312.3L270.0,309.7L269.7,308.2ZM267.8,318.4L267.7,319.2L268.3,319.4L267.8,318.4ZM275.1,368.2L277.3,372.6L279.2,373.1L275.1,368.2ZM280.8,373.5L281.9,373.8L285.5,372.6L280.8,373.5ZM306.8,368.6L318.5,359.7L317.6,359.6L306.8,368.6ZM147.7,308.6L147.0,308.1L143.1,320.7L147.7,308.6ZM125.5,276.7L125.7,277.2L131.3,276.8L125.5,276.7ZM125.6,274.7L125.0,274.9L125.2,275.7L125.6,274.7ZM222.2,295.0L218.7,290.0L218.4,290.6L222.2,295.0ZM264.5,300.4L264.3,300.2L237.4,302.9L264.5,300.4ZM369.4,738.5L368.9,738.4L369.1,750.5L369.8,750.7L369.4,738.5ZM471.4,716.8L450.8,742.3L450.9,743.1L471.4,716.8ZM486.5,702.1L485.9,699.0L486.3,702.7L486.5,702.1ZM485.0,691.4L491.5,684.7L491.5,683.8L484.9,690.5L485.0,691.4ZM468.4,360.6L499.4,360.5L499.7,360.1L468.4,360.6ZM501.9,356.6L502.5,355.7L502.3,354.5L501.9,356.6ZM500.1,340.6L499.7,338.3L499.6,338.2L500.1,340.6ZM485.6,318.4L485.9,308.6L485.4,318.1L485.6,318.4ZM486.0,305.6L507.4,286.9L486.1,304.4L486.0,305.6ZM506.2,281.0L505.5,280.4L507.4,286.9L506.2,281.0ZM512.8,255.2L513.8,247.7L512.1,254.0L512.8,255.2ZM525.1,233.3L547.7,195.8L544.6,198.8L525.1,233.3ZM549.7,193.8L556.7,189.1L553.0,190.6L549.7,193.8ZM671.1,442.1L670.4,440.6L671.2,445.0L671.1,442.1ZM632.0,329.0L631.4,327.5L633.5,401.1L632.0,329.0ZM630.3,324.5L629.7,324.2L630.7,325.5L630.3,324.5ZM547.8,283.4L558.3,293.3L558.9,293.4L547.8,283.4Z"};
+
+const DIRS = {
+  north:{name:'الشمالية',color:'var(--north)'},
+  south:{name:'الجنوبية',color:'var(--south)'},
+  east:{name:'الشرقية',color:'var(--east)'},
+  west:{name:'الغربية',color:'var(--west)'},
+  center:{name:'الوسطى',color:'var(--center)'}
+};
+
+const R = {
+  riyadh:{name:'الرياض',cap:'الرياض',dir:'center',loc:'وسط المملكة',
+    feat:['العاصمة','الدرعية التاريخية','جبال طويق'],
+    dyk:'تضم منطقة الرياض عاصمة المملكة، وهي الأكثر سكانًا بين المناطق.'},
+  makkah:{name:'مكة المكرمة',cap:'مكة المكرمة',dir:'west',loc:'غرب المملكة على ساحل البحر الأحمر',
+    feat:['المسجد الحرام','جدة','الطائف'],
+    dyk:'تضم المسجد الحرام قبلة المسلمين، ومدينة جدة أكبر موانئ البحر الأحمر في المملكة.'},
+  madinah:{name:'المدينة المنورة',cap:'المدينة المنورة',dir:'west',loc:'غرب المملكة على ساحل البحر الأحمر',
+    feat:['المسجد النبوي','ينبع','العُلا'],
+    dyk:'تقع محافظة العُلا بآثارها في الحِجر ضمن منطقة المدينة المنورة.'},
+  qassim:{name:'القصيم',cap:'بريدة',dir:'center',loc:'وسط المملكة شمال منطقة الرياض',
+    feat:['التمور','الزراعة','عنيزة'],
+    dyk:'تشتهر القصيم بالزراعة، ويُقام في بريدة مهرجان كبير للتمور.'},
+  sharqiyah:{name:'الشرقية',cap:'الدمام',dir:'east',loc:'شرق المملكة على ساحل الخليج العربي',
+    feat:['النفط','الأحساء','الجبيل'],
+    dyk:'أكبر مناطق المملكة مساحة، وفيها واحة الأحساء من أكبر واحات النخيل في العالم.'},
+  asir:{name:'عسير',cap:'أبها',dir:'south',loc:'جنوب غرب المملكة',
+    feat:['جبال السروات','السودة','خميس مشيط'],
+    dyk:'تتميز عسير بجبالها المرتفعة وجوّها المعتدل صيفًا.'},
+  tabuk:{name:'تبوك',cap:'تبوك',dir:'north',loc:'شمال غرب المملكة على ساحل البحر الأحمر',
+    feat:['نيوم','جبل اللوز','خليج العقبة'],
+    dyk:'قد تتساقط الثلوج شتاءً على جبل اللوز في منطقة تبوك.'},
+  hail:{name:'حائل',cap:'حائل',dir:'north',loc:'شمال المملكة',
+    feat:['جبلا أجا وسلمى','رسوم جبة الصخرية','الزراعة'],
+    dyk:'تضم حائل نقوشًا ورسومًا صخرية مسجّلة في قائمة التراث العالمي.'},
+  northern:{name:'الحدود الشمالية',cap:'عرعر',dir:'north',loc:'أقصى شمال المملكة',
+    feat:['عرعر','رفحاء','طريف'],
+    dyk:'سُمّيت بالحدود الشمالية لوقوعها على حدود المملكة الشمالية.'},
+  jouf:{name:'الجوف',cap:'سكاكا',dir:'north',loc:'شمال المملكة',
+    feat:['أشجار الزيتون','قلعة زعبل','دومة الجندل'],
+    dyk:'تشتهر الجوف بمزارع الزيتون الواسعة وإنتاج زيته.'},
+  jazan:{name:'جازان',cap:'جازان',dir:'south',loc:'أقصى جنوب غرب المملكة على البحر الأحمر',
+    feat:['جزر فرسان','المانجو','الزراعة'],
+    dyk:'تتبع جزر فرسان في البحر الأحمر منطقة جازان.'},
+  najran:{name:'نجران',cap:'نجران',dir:'south',loc:'جنوب المملكة',
+    feat:['موقع الأخدود الأثري','الربع الخالي','الزراعة'],
+    dyk:'يقع في نجران موقع الأخدود الأثري الذي ورد ذكر أصحابه في القرآن الكريم.'},
+  baha:{name:'الباحة',cap:'الباحة',dir:'south',loc:'جنوب غرب المملكة',
+    feat:['الغابات','قرية ذي عين','جبال السروات'],
+    dyk:'الباحة أصغر مناطق المملكة مساحة، وتشتهر بغاباتها الكثيفة.'}
+};
+const ORDER = ['riyadh','makkah','madinah','qassim','sharqiyah','asir','tabuk','hail','northern','jazan','najran','baha','jouf'];
+const SMALL = {baha:1,jazan:1};
+const LBL_OFF = {baha:[-30,-2],jazan:[-26,6],asir:[10,-8],makkah:[10,16],tabuk:[10,-40],northern:[70,10],jouf:[-10,-10],madinah:[0,-10]};
+
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+
+function drawMap(svg,{labels=true,caps=true,seas=true,color=true,onClick}={}){
+  svg.setAttribute('viewBox',GEO._vb.join(' '));
+  svg.innerHTML='';
+  const g=el('g',{},svg);
+  ORDER.forEach(id=>{
+    const p=el('path',{d:GEO[id].d,class:'rg','data-id':id},g);
+    if(color)p.style.fill=DIRS[R[id].dir].color;
+    if(onClick)p.addEventListener('click',()=>onClick(id,p));
+  });
+  if(caps)ORDER.forEach(id=>el('circle',{cx:GEO[id].cap[0],cy:GEO[id].cap[1],r:6,class:'cap'},svg));
+  if(labels)ORDER.forEach(id=>{
+    const o=LBL_OFF[id]||[0,0];
+    const t=el('text',{x:GEO[id].c[0]+o[0],y:GEO[id].c[1]+o[1],class:'lbl'+(SMALL[id]?' sm':'')},svg);
+    t.textContent=R[id].name;
+  });
+  if(seas){
+    const t1=el('text',{x:150,y:560,class:'sea',transform:'rotate(52 150 560)'},svg);t1.textContent='البحر الأحمر';
+    const t2=el('text',{x:925,y:300,class:'sea',transform:'rotate(58 925 300)'},svg);t2.textContent='الخليج العربي';
+  }
+  return svg;
+}
+
+/* title art: real outline + region lines + capital pins */
+(function(){
+  const s=document.getElementById('titleMap');s.setAttribute('viewBox',GEO._vb.join(' '));
+  ORDER.forEach(id=>el('path',{d:GEO[id].d,class:'rgl'},s));
+  el('path',{d:GEO._outline,class:'ol'},s);
+  ORDER.forEach(id=>el('circle',{cx:GEO[id].cap[0],cy:GEO[id].cap[1],r:id==='riyadh'?13:8,class:'pin'},s));
+})();
+document.getElementById('dirsLegend').innerHTML=Object.values(DIRS).map(d=>`<em style="background:${d.color}">${d.name}</em>`).join('');
+
+/* ===== stage scaling + slide navigation ===== */
+const stage=document.getElementById('stage');
+function fit(){const k=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform=`translate(-50%,-50%) scale(${k})`}
+addEventListener('resize',fit);fit();
+
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+const dotsBox=document.getElementById('dots');
+slides.forEach((_,i)=>{const d=document.createElement('i');d.onclick=()=>show(i);dotsBox.appendChild(d)});
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,j)=>s.classList.toggle('on',j===cur));
+  [...dotsBox.children].forEach((d,j)=>d.classList.toggle('on',j===cur));
+  document.getElementById('prevB').disabled=cur===0;
+  document.getElementById('nextB').disabled=cur===slides.length-1;
+  document.getElementById('bar').style.display=cur===0?'none':'flex';
+  slides[0].style.bottom=cur===0?'0':'';
+  if(slides[cur].id==='s7')buildResult();
+}
+function next(){show(cur+1)} function prev(){show(cur-1)}
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='PageDown'||e.key===' '){e.preventDefault();next()}
+  else if(e.key==='ArrowRight'||e.key==='PageUp'){e.preventDefault();prev()}
+  else if(e.key==='f'||e.key==='F')toggleFS();
+});
+function toggleFS(){
+  try{ if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen(); }catch(e){}
+}
+
+/* ===== explore ===== */
+const seen=new Set();
+let filter=null;
+const map1=document.getElementById('map1');
+drawMap(map1,{onClick:showRegion});
+const leg=document.getElementById('legend');
+Object.entries(DIRS).forEach(([k,v])=>{
+  const b=document.createElement('button');b.className='chip';b.innerHTML=`<i style="background:${v.color}"></i>${v.name}`;
+  b.onclick=()=>{filter=filter===k?null:k;
+    leg.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===b&&filter===k));
+    map1.querySelectorAll('.rg').forEach(p=>p.classList.toggle('dim',!!filter&&R[p.dataset.id].dir!==filter));};
+  leg.appendChild(b);
+});
+function showRegion(id,p){
+  map1.querySelectorAll('.rg').forEach(x=>x.classList.remove('sel'));p.classList.add('sel');
+  p.parentNode.appendChild(p);
+  const r=R[id],d=DIRS[r.dir];
+  document.getElementById('info').innerHTML=`
+    <div class="rname">منطقة ${r.name}</div>
+    <span class="rdir" style="background:${d.color}">المناطق ${d.name}</span>
+    <div class="fact"><div class="fi">${icon('gov')}</div><div><b>مقر الإمارة</b><span>${r.cap}</span></div></div>
+    <div class="fact"><div class="fi">${icon('compass')}</div><div><b>الموقع</b><span>${r.loc}</span></div></div>
+    <div class="fact" style="border:0"><div class="fi">${icon('pin')}</div><div><b>من أبرز معالمها</b><div class="feat">${r.feat.map(f=>`<em>${f}</em>`).join('')}</div></div></div>
+    <div class="dyk">${icon('bulb')}<div><b>هل تعلمين؟</b>${r.dyk}</div></div>`;
+  seen.add(id);
+  document.getElementById('pcount').textContent=`${seen.size} / 13`;
+  document.getElementById('pbar').style.width=(seen.size/13*100)+'%';
+  document.getElementById('medal').classList.toggle('show',seen.size===13);
+}
+
+/* ===== map challenge ===== */
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const MC_N=8;
+let mc={};
+const CLUES={
+  riyadh:'تقع فيها عاصمة المملكة',
+  makkah:'تضم المسجد الحرام ومدينة جدة',
+  madinah:'تضم المسجد النبوي ومحافظة العُلا',
+  qassim:'مقر إمارتها مدينة بريدة',
+  sharqiyah:'أكبر المناطق مساحة وتطل على الخليج العربي',
+  asir:'مقر إمارتها مدينة أبها',
+  tabuk:'تقع في الشمال الغربي وفيها مشروع نيوم',
+  hail:'تشتهر بجبلي أجا وسلمى',
+  northern:'مقر إمارتها مدينة عرعر',
+  jouf:'مقر إمارتها سكاكا وتشتهر بالزيتون',
+  jazan:'تتبعها جزر فرسان',
+  najran:'يقع فيها موقع الأخدود الأثري',
+  baha:'أصغر مناطق المملكة مساحة'
+};
+const map2=document.getElementById('map2');
+function mcStart(){
+  mc={list:shuffle(ORDER).slice(0,MC_N),i:0,score:0,tries:0,res:[],lock:false};
+  drawMap(map2,{labels:false,caps:false,color:false,onClick:mcClick});
+  document.getElementById('mcScore').textContent='0';
+  mcShow();
+}
+function mcShow(){
+  const id=mc.list[mc.i];mc.tries=0;mc.lock=false;
+  map2.querySelectorAll('.rg').forEach(p=>p.classList.remove('right','wrong','hint'));
+  document.getElementById('mcPrompt').innerHTML=mc.i%2
+    ?`حدّدي المنطقة التي <mark>${CLUES[id]}</mark>`
+    :`حدّدي على الخريطة منطقة <mark>${R[id].name}</mark>`;
+  document.getElementById('mcRound').textContent=`${mc.i+1} / ${MC_N}`;
+  const t=document.getElementById('mcToast');t.innerHTML='';t.className='toast';
+  document.getElementById('mcNext').style.visibility='hidden';
+  renderDots('mcDots',MC_N,mc.res,mc.i);
+}
+function mcClick(id,p){
+  if(mc.lock)return;
+  const ans=mc.list[mc.i],t=document.getElementById('mcToast');
+  if(id===ans){
+    p.classList.add('right');const pts=mc.tries===0?2:1;mc.score+=pts;mc.res.push(true);mc.lock=true;
+    t.className='toast ok';t.innerHTML=`${icon('check')}<div>صحيح! هذه منطقة ${R[ans].name}، ومقر إمارتها ${R[ans].cap}. (+${pts})</div>`;
+    endMc();
+  }else{
+    p.classList.add('wrong');mc.tries++;
+    if(mc.tries>=2){
+      mc.res.push(false);mc.lock=true;
+      map2.querySelector(`[data-id="${ans}"]`).classList.add('hint');
+      t.className='toast bad';t.innerHTML=`${icon('cross')}<div>هذه منطقة ${R[id].name}. الإجابة الصحيحة مظلّلة بالذهبي: منطقة ${R[ans].name}.</div>`;
+      endMc();
+    }else{t.className='toast bad';t.innerHTML=`${icon('cross')}<div>هذه منطقة ${R[id].name}. حاولي مرة أخرى.</div>`;
+      setTimeout(()=>p.classList.remove('wrong'),900);}
+  }
+}
+function endMc(){
+  document.getElementById('mcScore').textContent=mc.score;
+  renderDots('mcDots',MC_N,mc.res,-1);
+  document.getElementById('mcNext').style.visibility='visible';
+  document.getElementById('mcNextT').textContent=mc.i===MC_N-1?'إلى أسئلة التقييم':'التالي';
+}
+function mcNext(){if(mc.i<MC_N-1){mc.i++;mcShow()}else next()}
+function renderDots(id,n,res,c){
+  document.getElementById(id).innerHTML=Array.from({length:n},(_,i)=>
+    `<i class="${i<res.length?(res[i]?'ok':'no'):(i===c?'cur':'')}"></i>`).join('');
+}
+
+/* ===== assessment ===== */
+const SKILL_IC={'تذكّر':'bulb','فهم':'book','تطبيق':'pin','قراءة خريطة':'map','استدلال':'search'};
+const QS=[
+  {skill:'تذكّر',q:'يبلغ عدد المناطق الإدارية في المملكة العربية السعودية:',o:['13 منطقة','10 مناطق','11 منطقة','15 منطقة'],a:0,e:'تنقسم المملكة إداريًا إلى 13 منطقة، لكل منطقة مقر إمارة.'},
+  {skill:'قراءة خريطة',map:'qassim',q:'المنطقة المظلّلة على الخريطة هي منطقة:',o:['القصيم','حائل','الرياض','المدينة المنورة'],a:0,e:'تقع القصيم في وسط المملكة شمال منطقة الرياض، ومقر إمارتها بريدة.'},
+  {skill:'فهم',q:'أكبر مناطق المملكة العربية السعودية من حيث المساحة هي منطقة:',o:['الشرقية','الرياض','مكة المكرمة','تبوك'],a:0,e:'المنطقة الشرقية هي الأكبر مساحة، وتمتد من ساحل الخليج العربي إلى رمال الربع الخالي.'},
+  {skill:'تطبيق',q:'طالبة تسكن في مدينة أبها، فهي تسكن في منطقة:',o:['عسير','الباحة','جازان','نجران'],a:0,e:'أبها هي مقر إمارة منطقة عسير.'},
+  {skill:'قراءة خريطة',q:'سافرت أسرة من مدينة الرياض إلى مدينة الدمام، فإن اتجاه سفرها:',o:['نحو الشرق','نحو الغرب','نحو الشمال','نحو الجنوب'],a:0,e:'تقع الدمام (مقر إمارة المنطقة الشرقية) شرق الرياض على ساحل الخليج العربي.'},
+  {skill:'استدلال',q:'زارت سارة جزر فرسان في البحر الأحمر، فهذه الجزر تتبع منطقة:',o:['جازان','مكة المكرمة','تبوك','عسير'],a:0,e:'جزر فرسان تقع في جنوب البحر الأحمر وتتبع منطقة جازان.'},
+  {skill:'قراءة خريطة',map:'hail',q:'المنطقة المظلّلة على الخريطة هي منطقة:',o:['حائل','الجوف','القصيم','الحدود الشمالية'],a:0,e:'تقع حائل في شمال المملكة، ويحمل مقر إمارتها الاسم نفسه.'},
+  {skill:'تذكّر',q:'مقر إمارة منطقة الحدود الشمالية هو مدينة:',o:['عرعر','سكاكا','رفحاء','طريف'],a:0,e:'عرعر هي مقر إمارة الحدود الشمالية، أما سكاكا فمقر إمارة الجوف.'},
+  {skill:'استدلال',q:'أيّ المناطق الآتية لا تطل على البحر الأحمر؟',o:['القصيم','تبوك','المدينة المنورة','جازان'],a:0,e:'القصيم منطقة داخلية في وسط المملكة، أما تبوك والمدينة المنورة وجازان فتطل على البحر الأحمر.'},
+  {skill:'فهم',q:'أصغر مناطق المملكة مساحة، وتشتهر بالغابات وقرية ذي عين الأثرية:',o:['الباحة','عسير','نجران','القصيم'],a:0,e:'الباحة أصغر المناطق مساحة، وتقع في جنوب غرب المملكة على جبال السروات.'}
+];
+let qz={};
+const LET=['أ','ب','ج','د'];
+function qStart(){qz={list:shuffle(QS).map(q=>{const idx=shuffle([0,1,2,3]);return{...q,o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a)}}),i:0,score:0,res:[]};qShow()}
+function qShow(){
+  const q=qz.list[qz.i];
+  document.getElementById('qRound').textContent=`السؤال ${qz.i+1} من ${qz.list.length}`;
+  document.getElementById('qSkill').innerHTML=icon(SKILL_IC[q.skill])+'المهارة: '+q.skill;
+  document.getElementById('qText').textContent=q.q;
+  const m=document.getElementById('qMap');m.innerHTML='';
+  if(q.map){const s=el('svg',{class:'map'},m);drawMap(s,{labels:false,caps:false,seas:false,color:false});s.querySelector(`[data-id="${q.map}"]`).classList.add('hl');}
+  else m.innerHTML=`<div class="qicon">${icon(SKILL_IC[q.skill])}</div>`;
+  const o=document.getElementById('qOpts');o.innerHTML='';
+  q.o.forEach((t,i)=>{const b=document.createElement('button');b.className='opt';b.innerHTML=`<span class="l">${LET[i]}</span>${t}`;b.onclick=()=>qAnswer(i);o.appendChild(b)});
+  const e=document.getElementById('qExpl');e.className='expl';e.innerHTML='&nbsp;';
+  document.getElementById('qNext').style.visibility='hidden';
+  renderDots('qDots',qz.list.length,qz.res,qz.i);
+}
+function qAnswer(i){
+  const q=qz.list[qz.i],btns=[...document.querySelectorAll('#qOpts .opt')];
+  btns.forEach(b=>b.disabled=true);
+  btns[q.a].classList.add('ok');
+  const ok=i===q.a;if(!ok)btns[i].classList.add('no');else qz.score++;
+  qz.res.push(ok);
+  const e=document.getElementById('qExpl');e.className='expl show';
+  e.style.color=ok?'var(--ok)':'var(--bad)';
+  e.innerHTML=icon(ok?'check':'cross')+`<div><b>${ok?'إجابة صحيحة.':'إجابة غير صحيحة.'}</b> <span style="color:var(--ink)">${q.e}</span></div>`;
+  renderDots('qDots',qz.list.length,qz.res,-1);
+  document.getElementById('qNext').style.visibility='visible';
+  document.getElementById('qNextT').textContent=qz.i===qz.list.length-1?'عرض النتيجة':'التالي';
+}
+function qNext(){if(qz.i<qz.list.length-1){qz.i++;qShow()}else next()}
+
+/* ===== summary ===== */
+document.getElementById('sumTable').innerHTML=ORDER.map((id,i)=>
+  `<tr><td>${i+1}</td><td class="c"><i style="background:${DIRS[R[id].dir].color}"></i>${R[id].name}</td><td>${R[id].cap}</td><td>${DIRS[R[id].dir].name}</td></tr>`).join('');
+function buildResult(){
+  const mcMax=MC_N*2,qMax=QS.length,mcS=mc.score||0,qS=qz.score||0;
+  const pct=Math.round((mcS/mcMax*0.4+qS/qMax*0.6)*100);
+  const st=pct>=90?3:pct>=70?2:pct>=40?1:0;
+  const msg=pct>=90?'ممتاز! أنتِ خبيرة في جغرافيا الوطن':pct>=70?'أداء رائع! راجعي الأسئلة التي أخطأتِ فيها':pct>=40?'بداية جيدة، عودي إلى الخريطة واستكشفي من جديد':'لا بأس، استكشفي الخريطة مرة أخرى ثم أعيدي المحاولة';
+  document.getElementById('result').innerHTML=`
+    <div class="score">${pct}%</div>
+    <div class="stars">${[0,1,2].map(i=>`<span class="${i<st?'':'off'}">${icon('starF')}</span>`).join('')}</div>
+    <div class="msg">${msg}</div>
+    <div class="rows">
+      <div><b>${seen.size}/13</b>مناطق مستكشفة</div>
+      <div><b>${mcS}/${mcMax}</b>تحدّي الخريطة</div>
+      <div><b>${qS}/${qMax}</b>أسئلة التقييم</div>
+    </div>
+    <div class="acts">
+      <button class="btn" onclick="try{window.print()}catch(e){}">${icon('print')}طباعة</button>
+      <button class="btn light" onclick="restart()">${icon('replay')}إعادة الدرس</button>
+    </div>`;
+}
+function restart(){
+  seen.clear();document.getElementById('pcount').textContent='0 / 13';document.getElementById('pbar').style.width='0';
+  document.getElementById('medal').classList.remove('show');
+  map1.querySelectorAll('.rg').forEach(p=>p.classList.remove('sel'));
+  document.getElementById('info').innerHTML=`<div class="empty">${icon('tap')}اختاري منطقة من الخريطة</div>`;
+  document.getElementById('reveal').classList.remove('show');document.getElementById('revealBtn').style.display='';
+  mcStart();qStart();show(0);
+}
+
+paintIcons();
+mcStart();qStart();show(0);
+</script>
+</body>
+</html>
